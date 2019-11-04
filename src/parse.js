@@ -119,21 +119,24 @@ module.exports = function parse() {
     if (socket) {
         if (!socket.waitForContent) {
             let contentLength = this.read(8);
-            contentLength = contentLength.slice(4).readUInt32BE();
+            if (contentLength) {
+                contentLength = contentLength.slice(4).readUInt32BE();
 
-            const content = this.read(contentLength);
+                const content = this.read(contentLength);
 
-            if (!content) {
-                socket.waitForContent = true;
-                socket.contentLength = contentLength;
-                return;
+                if (!content) {
+                    socket.waitForContent = true;
+                    socket.contentLength = contentLength;
+                    return;
+                }
+
+                records = parseContent(content);
             }
-
-            records = parseContent(content);
         }
 
         if (socket.contentLength < 1) {
-            throw new Error(`Invalid content length: ${socket.contentLength}`);
+            console.log(`Invalid content length: ${socket.contentLength}`);
+            return;
         }
 
         const content = this.read(socket.contentLength);
@@ -144,6 +147,7 @@ module.exports = function parse() {
 
         records = parseContent(content);
         records.forEach(value => console.log(value));
+
     } else {
         let imei = this.read(17);
         if (imei) {
