@@ -10,7 +10,7 @@ const database = new Client({
   port: 5432,
 })
 
-// database.connect()
+database.connect()
 
 // database.query('SELECT NOW()', (err, res) => {
 //   console.log(err, res)

@@ -1,6 +1,6 @@
 'use strict';
 
-const IMEIs = require('./IMEIs');
+// const IMEIs = require('./IMEIs');
 const Sockets = require('./sockets');
 const Database = require('./db');
 
@@ -145,22 +145,24 @@ module.exports = function parse() {
         records = parseContent(content);
         records.forEach(value => console.log(value));
     } else {
-        const imei = this.read(17).toString().slice(2);
-        const text = "SELECT COUNT(id) FROM assets WHERE properties->>'imei' = $1";
-        const values = [imei];
+        let imei = this.read(17);
+        if (imei) {
+            imei = imei.toString().slice(2);
 
-        // Database.connect();
-        // Database.query(text, values, (err, res) => {
-        //     if (!err && res.rowCount > 0 && res.rows[0].count > 0) {
-        //         Sockets.set(this, {imei, self: this, waitForContent: false});
-        //         this.write(Buffer.from('01', 'hex'));
-        //     }
-        //     Database.end();
-        // });
+            // For testing
+            Sockets.set(this, {imei, self: this, waitForContent: false});
+            this.write(Buffer.from('01', 'hex'));
 
-        // if (!IMEIs.has(imei)) {
-        //     throw new Error('Unknown device');
-        // }
+            // const text = "SELECT COUNT(id) FROM assets WHERE properties->>'imei' = $1";
+            // const values = [imei.toString().slice(2)];
+            
+            // Database.query(text, values, (err, res) => {
+            //     if (!err && res.rowCount > 0 && res.rows[0].count > 0) {
+            //         Sockets.set(this, {imei, self: this, waitForContent: false});
+            //         this.write(Buffer.from('01', 'hex'));
+            //     }
+            // });
+        }
     }
 };
 
