@@ -1,0 +1,14 @@
+{
+  "name": "cookshop-fmxxxx",
+  "version": "0.1.0",
+  "description": "Cookshop Teltonika FMXXXX Parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "PORT=12141 node index.js"
+  },
+  "author": "Cookshop Food Services",
+  "dependencies" : { 
+    "pg" : "^7.12.1"
+  }
+}
