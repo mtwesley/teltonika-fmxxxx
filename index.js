@@ -51,7 +51,7 @@ const server = net.createServer((connection) => {
             information.forEach((info) => 
                 request.post({uri: messageConfig.url, json: {imei: socket.imei, data: information}}));
             console.log(`${connection.remoteAddress}: IMEI ${socket.imei}`);
-            console.log(`${connection.remoteAddress}: Information`, socket.information);
+            console.log(`${connection.remoteAddress}: Information`, information);
             connection.write(Buffer.from("00000002", 'hex'));
         }
     });
