@@ -9,7 +9,7 @@ const PORT = args['p'] || 12141;
 const sockets = new Map();
 
 const server = net.createServer((connection) => {
-    console.log(`${connection.remoteAddress}: Connection established.`);
+    console.log(`${connection.remoteAddress}: Connection established`);
 
     if (!sockets.has(connection)) sockets.set(connection, {imei: 0, infromation: {}});
     const socket = sockets.get(connection);
@@ -19,8 +19,10 @@ const server = net.createServer((connection) => {
         connection.close();
     });
 
+    connection.on('close', hasError => console.log(`${connection.remoteAddress}: Connection closed`));
+
     connection.on('data', (data) => {
-        console.log(`${connection.remoteAddress}: Data received.`);
+        console.log(`${connection.remoteAddress}: Data received`);
 
         if (data.length == 17) {
             let response = Buffer.from('01', 'hex');
@@ -40,4 +42,4 @@ const server = net.createServer((connection) => {
     });
 });
 
-server.listen(PORT, HOST, () => console.log(`Server listening on (${HOST}:${PORT}).`));
+server.listen(PORT, HOST, () => console.log(`Server listening on (${HOST}:${PORT})`));
