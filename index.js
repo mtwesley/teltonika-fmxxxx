@@ -25,7 +25,7 @@ const pool = new Pool({
 const server = net.createServer((connection) => {
     console.log(`${connection.remoteAddress}: Connection established`);
 
-    if (!sockets.has(connection)) sockets.set(connection, {imei: 0, infromation: {}});
+    if (!sockets.has(connection)) sockets.set(connection, {imei: 0});
     const socket = sockets.get(connection);
 
     connection.on('error', e => {
@@ -41,15 +41,15 @@ const server = net.createServer((connection) => {
         if (data.length == 17) {
             let response = Buffer.from('01', 'hex');
             let imei = data.toString().slice(2);
-            socket.imei = imei;
+            socket.imei = parseInt(imei);
             connection.write(response);
         } else {
             let payload = data.slice(0, 8);
             let contentlength = payload.slice(4,8);
             let content = data.slice(8, contentlength.readUInt32BE());
             let information = parser(content);
-            socket.information = information;
-            request.post({uri: messageConfig.url, json: socket});
+            information.forEach((info) => 
+                request.post({uri: messageConfig.url, json: {imei: imei, data: information}}));
             console.log(`${connection.remoteAddress}: IMEI ${socket.imei}`);
             console.log(`${connection.remoteAddress}: Information`, socket.information);
             connection.write(Buffer.from("00000002", 'hex'));
