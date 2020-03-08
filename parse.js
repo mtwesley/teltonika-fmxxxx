@@ -4,6 +4,12 @@ function getValue(content, offset, length) {
     return parseInt(content.slice(offset, length).toString('hex'), 16);
 }
 
+function getGPSValue(content, offset, length) {
+    const precision = 10000000;
+    const value = getValue(content, offset, length);
+    return (value / precision) * ((value.toString(2))[0] == '0' ? 1 : -1);
+}
+
 module.exports = function parseContent(content) {
 
     // console.log("parser_content");
@@ -23,9 +29,9 @@ module.exports = function parseContent(content) {
         content = content.slice(8);
         const priority = getValue(content, 0, 1);
         content = content.slice(1);
-        const longitude = getValue(content, 0, 4);
+        const longitude = getGPSValue(content, 0, 4);
         content = content.slice(4);
-        const latitude = getValue(content, 0, 4);
+        const latitude = getGPSValue(content, 0, 4);
         content = content.slice(4);
         const altitude = getValue(content, 0, 2);
         content = content.slice(2);
