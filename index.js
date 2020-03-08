@@ -1,6 +1,11 @@
 const net = require('net');
 const parser = require('./parse');
 
+const args = require('minimist')(process.argv.slice(2));
+
+const HOST = args['h'] || '0.0.0.0';
+const PORT = args['p'] || 12141;
+
 net.createServer((connection) => {
     connection.on('data', (data) => {
         
@@ -43,6 +48,5 @@ net.createServer((connection) => {
 
             connection.write(Buffer.from("00000002", 'hex'));
         }
-
     });
-}).listen(12000, '0.0.0.0');
+}).listen(PORT, HOST);
