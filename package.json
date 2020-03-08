@@ -1,14 +1,11 @@
 {
   "name": "cookshop-fmxxxx",
   "version": "0.1.0",
-  "description": "Cookshop Teltonika FMXXXX Parser",
+  "description": "Cookshop FMXXXX Parser",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "PORT=12141 node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Cookshop Food Services",
-  "dependencies" : { 
-    "pg" : "^7.12.1"
-  }
+  "author": "Mlen-Too Wesley",
+  "license": "ISC"
 }
