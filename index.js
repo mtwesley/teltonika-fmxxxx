@@ -49,7 +49,7 @@ const server = net.createServer((connection) => {
             let content = data.slice(8, contentlength.readUInt32BE());
             let information = parser(content);
             information.forEach((info) => 
-                request.post({uri: messageConfig.url, json: {imei: imei, data: information}}));
+                request.post({uri: messageConfig.url, json: {imei: socket.imei, data: information}}));
             console.log(`${connection.remoteAddress}: IMEI ${socket.imei}`);
             console.log(`${connection.remoteAddress}: Information`, socket.information);
             connection.write(Buffer.from("00000002", 'hex'));
