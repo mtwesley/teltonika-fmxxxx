@@ -27,15 +27,14 @@ const server = net.createServer((connection) => {
             let imei = data.toString().slice(2);
             socket.imei = imei;
             connection.write(response);
-        } 
-        else {
+        } else {
             let payload = data.slice(0, 8);
             let contentlength = payload.slice(4,8);
             let content = data.slice(8, contentlength.readUInt32BE());
             let information = parser(content);
             socket.information = information;
-            console.log(`${connection.remoteAddress}: IMEI (${socket.imei})`);
-            console.log(`${connection.remoteAddress}: Information (${socket.information})`);
+            console.log(`${connection.remoteAddress}: IMEI ${socket.imei}`);
+            console.log(`${connection.remoteAddress}: Information`, socket.information);
             connection.write(Buffer.from("00000002", 'hex'));
         }
     });
