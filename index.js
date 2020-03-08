@@ -28,7 +28,7 @@ net.createServer((connection) => {
             let information = parser(content);
             
             // console.log("--------------------------------")
-            // console.log(information);
+            console.log(information);
 
             let latitude = Buffer.allocUnsafe(4);
             let longitude = Buffer.allocUnsafe(4);
@@ -39,7 +39,7 @@ net.createServer((connection) => {
             latitude = latitude.readInt32BE() / Math.pow(10,7);
             longitude = longitude.readInt32BE() / Math.pow(10,7);
             
-            // console.log(`latitude: ${latitude} | longitude: ${longitude}`);
+            console.log(`latitude: ${latitude} | longitude: ${longitude}`);
 
             connection.write(Buffer.from("00000002", 'hex'));
         }

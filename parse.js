@@ -106,7 +106,7 @@ module.exports = function parseContent(content) {
         });
     }
 
-    console.log(content);
+    // console.log(content);
 
     return avlRecords;
 };
