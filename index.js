@@ -1,12 +1,26 @@
 const net = require('net');
 const parser = require('./parse');
+const config = require('config');
+var request = require('request');
 
-const args = require('minimist')(process.argv.slice(2));
+const { Pool, Client } = require('pg')
 
-const HOST = args['h'] || '0.0.0.0';
-const PORT = args['p'] || 12141;
+const serverConfig = config.get('server');
+const databaseConfig = config.get('database');
+const messageConfig = config.get('message');
+
+const HOST = serverConfig.host;
+const PORT = serverConfig.port;
 
 const sockets = new Map();
+
+const pool = new Pool({
+  host: databaseConfig.host,
+  port: databaseConfig.port,
+  user: databaseConfig.user,
+  password: databaseConfig.password,
+  database: databaseConfig.database,
+});
 
 const server = net.createServer((connection) => {
     console.log(`${connection.remoteAddress}: Connection established`);
@@ -35,6 +49,7 @@ const server = net.createServer((connection) => {
             let content = data.slice(8, contentlength.readUInt32BE());
             let information = parser(content);
             socket.information = information;
+            request.post({uri: messageConfig.url, json: socket});
             console.log(`${connection.remoteAddress}: IMEI ${socket.imei}`);
             console.log(`${connection.remoteAddress}: Information`, socket.information);
             connection.write(Buffer.from("00000002", 'hex'));
