@@ -16,7 +16,7 @@ const server = net.createServer((connection) => {
 
     connection.on('data', (data) => {
 
-        console.log(`${connection.remoteAddress}: Data received\n${data}\n`);
+        console.log(`${connection.remoteAddress}: Data received.`);
         
         // console.log(connection.remoteAddress)
         // console.log(data);
@@ -25,7 +25,7 @@ const server = net.createServer((connection) => {
             let response = Buffer.from('01', 'hex');
             let imei = data.toString().slice(2);
             
-            console.log(`${connection.remoteAddress}: IMEI (${imei}`);
+            console.log(`${connection.remoteAddress}: IMEI (${imei})`);
 
             connection.write(response);
         } 
@@ -62,4 +62,4 @@ const server = net.createServer((connection) => {
     });
 });
 
-server.listen(PORT, HOST, () => console.log("Server listening."));
+server.listen(PORT, HOST, () => console.log(`Server listening on (${HOST}:${PORT}).`));

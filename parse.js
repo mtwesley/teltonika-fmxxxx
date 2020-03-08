@@ -6,7 +6,7 @@ function getValue(content, offset, length) {
 
 function getGPSValue(content, offset, length) {
     const precision = 10000000;
-    const value = getValue(content, offset, length);
+    const value = ~(getValue(content, offset, length));
     return (value / precision) * ((value.toString(2))[0] == '0' ? 1 : -1);
 }
 
