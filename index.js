@@ -33,7 +33,10 @@ const server = net.createServer((connection) => {
         connection.close();
     });
 
-    connection.on('close', hasError => console.log(`${connection.remoteAddress}: Connection closed`));
+    connection.on('close', hasError => {
+        console.log(`${connection.remoteAddress}: Connection closed`);
+        sockets.delete(connection);
+    });
 
     connection.on('data', (data) => {
         console.log(`${connection.remoteAddress}: Data received`);
