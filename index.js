@@ -1,9 +1,9 @@
 const net = require('net');
 const parser = require('./parse');
 const config = require('config');
-var request = require('request');
+const request = require('request');
 
-const { Pool, Client } = require('pg')
+// const { Pool, Client } = require('pg')
 
 const serverConfig = config.get('server');
 const databaseConfig = config.get('database');
@@ -14,13 +14,13 @@ const PORT = serverConfig.port;
 
 const sockets = new Map();
 
-const pool = new Pool({
-  host: databaseConfig.host,
-  port: databaseConfig.port,
-  user: databaseConfig.user,
-  password: databaseConfig.password,
-  database: databaseConfig.database,
-});
+// const pool = new Pool({
+//   host: databaseConfig.host,
+//   port: databaseConfig.port,
+//   user: databaseConfig.user,
+//   password: databaseConfig.password,
+//   database: databaseConfig.database,
+// });
 
 const server = net.createServer((connection) => {
     console.log(`${connection.remoteAddress}: Connection established`);
@@ -52,7 +52,10 @@ const server = net.createServer((connection) => {
             let content = data.slice(8, contentlength.readUInt32BE());
             let information = parser(content);
             information.forEach((info) => 
-                request.post({uri: messageConfig.url, json: {imei: socket.imei, data: information}}));
+                request.post({
+                    headers: {'User-Agent': 'X-Cookshop-Teltonika'},
+                    uri: messageConfig.url, 
+                    json: {imei: socket.imei, data: information}}));
             console.log(`${connection.remoteAddress}: IMEI ${socket.imei}`);
             console.log(`${connection.remoteAddress}: Information`, information);
             connection.write(Buffer.from("00000002", 'hex'));
